@@ -50,7 +50,7 @@ class AdminController extends Controller
 
     public function catalogs()
     {
-        if (auth()->user()->hasRole('petugass')){
+        if (auth()->user()->hasRole('petugas')){
             $catalogs = Catalog::all();
             return view('admin.catalog.index', compact('catalogs'));
         } else{

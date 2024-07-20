@@ -77,10 +77,10 @@
                         <span class="dropdown-item dropdown-header">{{ $lateTransactionCount }} Notifications</span>
                         @foreach ($lateTransactions as $transaction)
                             <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item">
+                            <a href="/books" class="dropdown-item">
                                 <i class="fas fa-file mr-2"></i> Transaction ID: {{ $transaction->id }} is late
                                 <span class="float-right text-muted text-sm">
-                                    {{ $transaction->due_date ? $transaction->due_date->diffForHumans() : 'No due date' }}
+                                    {{ $transaction->date_end ? $transaction->date_end->diffForHumans() : 'No due date' }}
                                 </span>
                             </a>
                         @endforeach

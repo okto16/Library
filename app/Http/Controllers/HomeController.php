@@ -131,29 +131,32 @@ class HomeController extends Controller
         // ->whereMonth('created_at', '=', '06')
         // ->get();    
         // return $data10;
+        if (auth()->user()->hasRole('petugas')) {
+            $total_buku = Book::count();
+            $total_member = Member::count();
+            $total_penerbit = Publisher::count();
+            $total_peminjaman = Transaction::count();
 
-        $total_buku = Book::count();
-        $total_member = Member::count();
-        $total_penerbit = Publisher::count();
-        $total_peminjaman = Transaction::count();
+            $donut = Book::select(DB::raw("COUNT(publisher_id) as count"))->groupBy("publisher_id")->orderBy('publisher_id', 'asc')->pluck('count');
+            $label_donut = Publisher::orderBy('publisher_id', 'asc')->join('books', 'books.publisher_id', '=', 'publishers.id')->groupBy('publishers.name')->pluck('publishers.name');
 
-        $donut = Book::select(DB::raw("COUNT(publisher_id) as count"))->groupBy("publisher_id")->orderBy('publisher_id', 'asc')->pluck('count');
-        $label_donut = Publisher::orderBy('publisher_id', 'asc')->join('books', 'books.publisher_id', '=', 'publishers.id')->groupBy('publishers.name')->pluck('publishers.name');
-
-        $label_bar = ['Peminjaman', 'Pengembalian'];
-        $data_bar = [];
-        foreach ($label_bar as $key => $value) {
-            $data_bar[$key]['label'] = $label_bar[$key];
-            $data_bar[$key]['backgroundColor'] = $key == 0 ? 'rgba(60,141,188,0.9)' : 'rgba(210,214,222,1)';
-            $data_month = [];
-            foreach (range(1, 12) as $month) {
-                if ($key == 0) {
-                    $data_month[] = Transaction::select(DB::raw("COUNT(*) as total"))->whereMonth('date_start', '=', $month)->first()->total;
+            $label_bar = ['Peminjaman', 'Pengembalian'];
+            $data_bar = [];
+            foreach ($label_bar as $key => $value) {
+                $data_bar[$key]['label'] = $label_bar[$key];
+                $data_bar[$key]['backgroundColor'] = $key == 0 ? 'rgba(60,141,188,0.9)' : 'rgba(210,214,222,1)';
+                $data_month = [];
+                foreach (range(1, 12) as $month) {
+                    if ($key == 0) {
+                        $data_month[] = Transaction::select(DB::raw("COUNT(*) as total"))->whereMonth('date_start', '=', $month)->first()->total;
+                    }
+                    $data_month[] = Transaction::select(DB::raw("COUNT(*) as total"))->whereMonth('date_end', '=', $month)->first()->total;
                 }
-                $data_month[] = Transaction::select(DB::raw("COUNT(*) as total"))->whereMonth('date_end', '=', $month)->first()->total;
+                $data_bar[$key]['data'] = $data_month;
             }
-            $data_bar[$key]['data'] = $data_month;
+            return view('home', compact('total_buku', 'total_member', 'total_penerbit', 'total_peminjaman', 'donut', 'label_donut', 'data_bar'));
+        } else {
+            return abort(403);
         }
-        return view('home', compact('total_buku', 'total_member', 'total_penerbit', 'total_peminjaman', 'donut', 'label_donut', 'data_bar'));
     }
 }

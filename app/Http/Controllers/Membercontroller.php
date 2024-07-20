@@ -17,17 +17,21 @@ class Membercontroller extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            if ($request->gender) {
-                $datas = Member::where('gender', $request->gender)->get();
+        if (auth()->user()->hasRole('petugas')){
+            if ($request->ajax()) {
+                if ($request->gender) {
+                    $datas = Member::where('gender', $request->gender)->get();
             } else {
                 $datas = Member::all();
             }
-    
+            
             $datatables = datatables()->of($datas)->addIndexColumn();
             return $datatables->make(true);
         }
         return view('admin.member.index');
+    }else{
+                return abort(403);
+            }
     }
 
     public function api()

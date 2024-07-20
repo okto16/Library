@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Transaction extends Model
 {   
     protected $casts = [
-        'due_date' => 'datetime',
+        'date_end' => 'datetime:Y-m-d',
     ];
     protected $guarded = [''];
     use HasFactory;

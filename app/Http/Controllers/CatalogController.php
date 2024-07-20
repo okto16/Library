@@ -16,10 +16,14 @@ class CatalogController extends Controller
      */
     public function index()
     {
-        $catalogs = Catalog::with('books')->get();
-        // $catalogs = Catalog::all();
-        // return $catalogs;
-        return view('admin.catalog.index' , compact('catalogs'));
+        if (auth()->user()->hasRole('petugas')){
+            $catalogs = Catalog::with('books')->get();
+            // $catalogs = Catalog::all();
+            // return $catalogs;
+            return view('admin.catalog.index' , compact('catalogs'));
+        }else{
+                    return abort(403);
+                }
     }
 
     /**

@@ -16,23 +16,22 @@ class AuthController extends Controller
      */
     public function index()
     {
-       
+
         return view('admin.author.index');
     }
 
     public function api()
     {
-        $authors = Author::all();
-
-        // foreach ($authors as $key => $author) {
-        //     $author->date = convert_date($author->created_at);
-        // }
-
-        $datatables = datatables()->of($authors)
-                                ->addColumn('date', function ($author) {
-                                    return convert_date($author->created_at);
-                                })->addIndexColumn();
-        return $datatables->make(true);
+        if (auth()->user()->hasRole('petugas')) {
+            $authors = Author::all();
+            $datatables = datatables()->of($authors)
+                ->addColumn('date', function ($author) {
+                    return convert_date($author->created_at);
+                })->addIndexColumn();
+            return $datatables->make(true);
+        } else {
+            return abort(403);
+        }
     }
 
     /**

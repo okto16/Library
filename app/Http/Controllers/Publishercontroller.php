@@ -16,7 +16,11 @@ class Publishercontroller extends Controller
      */
     public function index()
     {
-        return view('admin.publisher.index',);
+        if (auth()->user()->hasRole('petugas')){
+            return view('admin.publisher.index',);
+        }else{
+                    return abort(403);
+                }
     }
     public function api()
     {

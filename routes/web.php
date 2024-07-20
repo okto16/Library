@@ -14,16 +14,16 @@ Auth::routes();
 
 // Testing Spatie
 Route::get('test_spatie', [AdminController::class, 'test_spatie']);
-Route::get('dashboard', [AdminController::class, 'dashboard']);
-Route::get('catalogs', [AdminController::class, 'catalogs']);
-Route::get('books', [AdminController::class, 'books']);
-Route::get('authors', [AdminController::class, 'authors']);
-Route::get('members', [AdminController::class, 'members']);
-Route::get('publishers', [AdminController::class, 'publishers']);
-Route::get('transactions', [AdminController::class, 'transactions']);
+// Route::get('dashboard', [AdminController::class, 'dashboard']);
+// Route::get('catalogs', [AdminController::class, 'catalogs']);
+// Route::get('books', [AdminController::class, 'books']);
+// Route::get('authors', [AdminController::class, 'authors']);
+// Route::get('members', [AdminController::class, 'members']);
+// Route::get('publishers', [AdminController::class, 'publishers']);
+// Route::get('transactions', [AdminController::class, 'transactions']);
 
 // Grouping data routes
-Route::group(['prefix' => 'data'], function() {
+Route::group([''], function() {
     Route::resource('/catalogs', App\Http\Controllers\CatalogController::class);
     Route::resource('/books', App\Http\Controllers\BookController::class);
     Route::resource('/authors', App\Http\Controllers\AuthController::class);

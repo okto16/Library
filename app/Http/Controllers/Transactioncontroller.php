@@ -15,15 +15,16 @@ class Transactioncontroller extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            if ($request->status) {
-                $datas = Transaction::where('status', $request->status)->get();
+        if (auth()->user()->hasRole('petugas')){
+            if ($request->ajax()) {
+                if ($request->status) {
+                    $datas = Transaction::where('status', $request->status)->get();
             } elseif ($request->date_start) {
                 $datas = Transaction::where('date_start', $request->date_start)->get();
             } else {
                 $datas = Transaction::all();
             }
-
+            
             $datatables = datatables()->of($datas)->addIndexColumn();
             return $datatables->make(true);
         }
@@ -34,6 +35,9 @@ class Transactioncontroller extends Controller
         // ->get();
         // $lateTransactionsCount = $lateTransactions->count();
         return view('admin.transaction.index', compact('members', 'books'));
+    }else{
+                return abort(403);
+            }
     }
 
     public function api()

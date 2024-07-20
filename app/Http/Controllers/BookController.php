@@ -19,10 +19,14 @@ class BookController extends Controller
      */
     public function index()
     {
-        $publishers = Publisher::all();
-        $authors = Author::all();
-        $catalogs = Catalog::all();
-        return view('admin.book.index', compact('publishers', 'authors', 'catalogs'));
+        if (auth()->user()->hasRole('petugas')){
+            $publishers = Publisher::all();
+            $authors = Author::all();
+            $catalogs = Catalog::all();
+            return view('admin.book.index', compact('publishers', 'authors', 'catalogs'));
+        }else{
+            return abort(403);
+        }
     }
     public function api()
     {
